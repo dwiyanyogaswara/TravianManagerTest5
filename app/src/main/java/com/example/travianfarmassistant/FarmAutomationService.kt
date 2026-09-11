@@ -1643,16 +1643,16 @@ class FarmAutomationService : Service() {
         """.trimIndent()
 
         fun attempt(attempt: Int) {
-            webView.evaluateJavascript(js) { result ->
+            webView?.evaluateJavascript(js) { result ->
                 val decoded = result?.trim()?.removePrefix("\"")?.removeSuffix("\"")?.replace("\\\"", "\"") ?: ""
                 if (decoded.contains("\"ok\":true")) {
-                    logMessage("HERO TRANSFER: openResourceTransfer dipanggil dengan targetResourceAmount dari DOM: $decoded")
+                    debugTrace("HERO TRANSFER: openResourceTransfer dipanggil dengan targetResourceAmount dari DOM: $decoded")
                     handler.postDelayed({ clickTransferSelected() }, 800L)
                 } else if (attempt < 8) {
-                    logMessage("HERO TRANSFER: DOM belum siap (attempt $attempt/8): $decoded")
+                    debugTrace("HERO TRANSFER: DOM belum siap (attempt $attempt/8): $decoded")
                     handler.postDelayed({ attempt(attempt + 1) }, 700L)
                 } else {
-                    logMessage("HERO TRANSFER: gagal membaca/memanggil openResourceTransfer dari DOM: $decoded")
+                    debugTrace("HERO TRANSFER: gagal membaca/memanggil openResourceTransfer dari DOM: $decoded")
                 }
             }
         }
